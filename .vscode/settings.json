@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "Builder.C": "cpp",
+        "Director.C": "cpp",
+        "Test.C": "cpp",
+        "Document.C": "cpp",
+        "ios": "cpp",
+        "string": "cpp",
+        "Element.C": "cpp",
+        "string_view": "cpp",
+        "unordered_map": "cpp",
+        "NamedNodeMap.C": "cpp",
+        "Text.C": "cpp",
+        "Node.C": "cpp",
+        "XMLTokenizer.C": "cpp",
+        "iosfwd": "cpp"
+    }
+}
