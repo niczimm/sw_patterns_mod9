@@ -13,6 +13,8 @@
         "Text.C": "cpp",
         "Node.C": "cpp",
         "XMLTokenizer.C": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "XMLValidator.C": "cpp",
+        "ValidChildren.C": "cpp"
     }
 }
