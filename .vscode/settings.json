@@ -15,6 +15,8 @@
         "XMLTokenizer.C": "cpp",
         "iosfwd": "cpp",
         "XMLValidator.C": "cpp",
-        "ValidChildren.C": "cpp"
+        "ValidChildren.C": "cpp",
+        "ValidatorCache.C": "cpp",
+        "vector": "cpp"
     }
 }

@@ -10,6 +10,8 @@
 #include "XMLValidator.H"
 #include "Builder.H"
 #include "Director.H"
+#include "ValidatorCache.H"
+#include "ValidatorMemento.H"
 
 void testTokenizer(int argc, char** argv);
 void testSerializer(int argc, char** argv);
@@ -197,6 +199,19 @@ void testValidator(int argc, char** argv)
 	schemaElement->addValidChild("attribute2", true);
 	schemaElement->setCanHaveText(true);
 
+	// Store Validator configuration
+	ValidatorCache* cache = new ValidatorCache(&xmlValidator);
+	cache->addMemento(xmlValidator.createMemento());
+
+	// Modify validator
+	ValidChildren* invalidElement = xmlValidator.addSchemaElement("BAD_ELEM");
+    invalidElement->addValidChild("junk", false);
+
+	// Restore Validator configuration
+	cache->restoreMemento();
+
+	// TODO: Validator Cache calls undo
+
 	dom::Document *	document	= new DocumentValidator(Document_Impl::getInstance(), &xmlValidator);
 	dom::Element *	root		= 0;
 	dom::Element *	child		= 0;
@@ -227,6 +242,7 @@ void testValidator(int argc, char** argv)
 	XMLSerializer	xmlSerializer(file = new std::fstream(argv[2], std::ios_base::out));
 	xmlSerializer.serializePretty(document);
 	delete file;
+	// todo: delete memento
 
 	// delete Document and tree.
 }

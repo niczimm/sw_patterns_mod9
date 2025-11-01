@@ -1,6 +1,7 @@
 class XMLValidator;   // forward declaration
 class State;          // forward declaration
 
+// Memento pattern - Memento
 class ValidatorMemento
 {
 public:
@@ -12,8 +13,14 @@ private:
     friend class XMLValidator;
     ValidatorMemento();
 
-    void SetState(State *state);
-    State* GetState();
+    void SetState(State *state) // Store configuration
+    {
+        this->_state = state;
+    }
+    State* GetState() // Retrieve configuration
+    {
+        return _state;
+    }
 
-    State* state;
+    State* _state;
 };

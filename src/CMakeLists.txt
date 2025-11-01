@@ -22,6 +22,8 @@ target_sources(Patterns PUBLIC
 	Test.C
 	Text.C
 	Text.H
+	ValidatorCache.H
+	ValidatorMemento.H
 	XMLSerializer.C
 	XMLSerializer.H
 	XMLTokenizer.C
