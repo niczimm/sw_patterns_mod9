@@ -1,5 +1,15 @@
+#ifndef VALIDATOR_MEMENTO_H
+#define VALIDATOR_MEMENTO_H
+
+#include <vector>
+
 class XMLValidator;   // forward declaration
-class State;          // forward declaration
+class ValidChildren;  // forward declaration
+
+struct State
+{
+    std::vector<ValidChildren*> schemaSnapshot;  // deep copies
+};
 
 // Memento pattern - Memento
 class ValidatorMemento
@@ -32,3 +42,5 @@ private:
 
     State* _state;
 };
+
+#endif // VALIDATOR_MEMENTO_H

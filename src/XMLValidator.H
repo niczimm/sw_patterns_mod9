@@ -8,11 +8,6 @@
 
 class ValidChildren;
 
-struct State
-{
-    std::vector<ValidChildren*> schemaSnapshot;  // deep copies
-};
-
 // Memento pattern - Originator
 class XMLValidator
 {
@@ -51,7 +46,7 @@ public:
 		return copy;
 	}
 
-	State* XMLValidator::captureState()
+	State* captureState()
 	{
 		State* state = new State();
 
