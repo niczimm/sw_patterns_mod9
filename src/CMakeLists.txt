@@ -14,6 +14,7 @@ target_sources(Patterns PUBLIC
 	Document.H
 	Element.C
 	Element.H
+	Handler.H
 	NamedNodeMap.C
 	NamedNodeMap.H
 	Node.C

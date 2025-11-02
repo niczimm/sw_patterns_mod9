@@ -47,7 +47,7 @@ namespace dom
 };
 
 // Proxy Pattern - Real Subject
-class Element_Impl : public virtual dom::Element, Node_Impl
+class Element_Impl : public virtual dom::Element, public Node_Impl
 {
 private:
 	NamedNodeMap_Impl	attributes;

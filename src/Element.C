@@ -3,6 +3,7 @@
 #include "Text.H"
 #include "Document.H"
 #include "XMLValidator.H"
+#include "Handler.H"
 
 Element_Impl::Element_Impl(const std::string & tagName, dom::Document * document) : Node_Impl(tagName, dom::Node::ELEMENT_NODE),
   attributes(document)
@@ -139,6 +140,12 @@ dom::Attr *		Element_Impl::setAttributeNode(dom::Attr * newAttr)
 
 	dynamic_cast<Node_Impl *>(dynamic_cast<Node *>(newAttr))->setParent(this);
 	attributes.push_back(newAttr);
+
+	if (newAttr->getName() == "message") {
+		if (Handler* h = dynamic_cast<Handler*>(this)) {
+			h->setHandlerMessage(newAttr->getValue());
+		}
+	}
 	return oldAttribute;
 }
 

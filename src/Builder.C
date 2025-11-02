@@ -2,10 +2,12 @@
 #include <iostream>
 
 #include <ctype.h>
+#include <string>
 #include "Document.H"
 #include "Element.H"
 #include "Attr.H"
 #include "Text.H"
+#include "Handler.H"
 
 // Forward declaration for ProxyElement
 class ProxyElement;
@@ -34,7 +36,11 @@ void Builder::createAttribute(const std::string & attribute)
 
 void Builder::createElement(const std::string & tag)
 {
-	currentElement = factory->createElement(trim(tag));  // Uses ProxyElement for lazy loading
+	if (tag == "handler" || tag == "Handlers") {
+        currentElement = new HandlerElement(tag, this->getDocument()); // Create Handler element (CoR pattern)
+    } else {
+		currentElement = factory->createElement(trim(tag)); // Uses ProxyElement for lazy loading
+	}
 	
 	// Record the current file position as the start of potential children
 	if (xmlFile != nullptr) {
