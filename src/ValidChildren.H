@@ -20,6 +20,10 @@ public:
 
 	virtual void		addValidChild(const std::string & child, bool isAttribute);
 	virtual bool		childIsValid(const std::string & child, bool isAttribute);
+
+	// Getter methods for memento pattern deep copy
+	const std::vector<std::string>& getValidChildren() const { return validChildren; }
+	const std::vector<bool>& getChildIsAttribute() const { return childIsAttribute; }
 };
 
 #endif // VALIDCHILDREN_H

@@ -188,7 +188,9 @@ void testValidator(int argc, char** argv)
 	// element contains:  element
 	// element contains attributes:  attribute, attribute2
 	//
-	XMLValidator	xmlValidator;
+	XMLValidator	xmlValidator; // originator
+	ValidatorCache* cache = new ValidatorCache(); //caretaker
+
 	ValidChildren *	schemaElement	= xmlValidator.addSchemaElement("");
 	schemaElement->addValidChild("document", false);
 	schemaElement	= xmlValidator.addSchemaElement("document");
@@ -199,18 +201,13 @@ void testValidator(int argc, char** argv)
 	schemaElement->addValidChild("attribute2", true);
 	schemaElement->setCanHaveText(true);
 
-	// Store Validator configuration
-	ValidatorCache* cache = new ValidatorCache(&xmlValidator);
+	// Save Validator configuration in memento
 	cache->addMemento(xmlValidator.createMemento());
 
-	// Modify validator
+	// Modify validator and save new configuration
 	ValidChildren* invalidElement = xmlValidator.addSchemaElement("BAD_ELEM");
     invalidElement->addValidChild("junk", false);
-
-	// Restore Validator configuration
-	cache->restoreMemento();
-
-	// TODO: Validator Cache calls undo
+	cache->addMemento(xmlValidator.createMemento());
 
 	dom::Document *	document	= new DocumentValidator(Document_Impl::getInstance(), &xmlValidator);
 	dom::Element *	root		= 0;
@@ -234,6 +231,9 @@ void testValidator(int argc, char** argv)
 	root->appendChild(child);
 	child		= new ElementValidator(document->createElement("element"), &xmlValidator);
 	root->appendChild(child);
+
+	// Restore Validator configuration to previously saved configuration
+	xmlValidator.restoreFromMemento(cache->GetMemento(0));
 
 	//
 	// Serialize

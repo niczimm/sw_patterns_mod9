@@ -6,7 +6,14 @@ class ValidatorMemento
 {
 public:
     // narrow public interface
-    virtual ~ValidatorMemento();
+    virtual ~ValidatorMemento()
+    {
+        // Delete deep snapshot
+        if (_state) {
+            for (auto* vc : _state->schemaSnapshot) delete vc;
+            delete _state;
+        }
+    }
 
 private:
     // private members accessbile only to the Originator
@@ -17,7 +24,8 @@ private:
     {
         this->_state = state;
     }
-    State* GetState() // Retrieve configuration
+
+    State* GetState() const // Retrieve configuration, restore saved state
     {
         return _state;
     }

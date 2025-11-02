@@ -10,8 +10,7 @@ class ValidChildren;
 
 struct State
 {
-	std::string elementName;
-	std::vector<ValidChildren *> schemaSnapshot;
+    std::vector<ValidChildren*> schemaSnapshot;  // deep copies
 };
 
 // Memento pattern - Originator
@@ -25,18 +24,54 @@ public:
 	XMLValidator(void)	{}
 	~XMLValidator() { for (int i = 0; i < schema.size(); i++) delete schema[i]; }
 
+	virtual ValidChildren *				addSchemaElement(std::string element);
+	virtual std::vector<ValidChildren *>::iterator	findSchemaElement(std::string element);
+
 	ValidatorMemento*			createMemento() // should this be somewhere else?
 	{
 		ValidatorMemento* m = new ValidatorMemento();
-		m->SetState(_state);
+		m->SetState(captureState());
 		return m;
 	}
 
-	void getMemento(ValidatorMemento* m)
+	// Helper function to copy current state
+	ValidChildren* copyValidChildren(ValidChildren* vc)
 	{
-		_state = m->GetState();
+		ValidChildren* copy = new ValidChildren(vc->getThisElement());
+
+		// Added getter methods
+		auto& children = vc->getValidChildren();
+		auto& attributes    = vc->getChildIsAttribute();
+
+		for (size_t i = 0; i < children.size(); i++) {
+			copy->addValidChild(children[i], attributes[i]);
+		}
+
+		copy->setCanHaveText(vc->canHaveText());
+		return copy;
 	}
 
-	virtual ValidChildren *				addSchemaElement(std::string element);
-	virtual std::vector<ValidChildren *>::iterator	findSchemaElement(std::string element);
+	State* XMLValidator::captureState()
+	{
+		State* state = new State();
+
+		for (auto vc : schema) {
+			state->schemaSnapshot.push_back(copyValidChildren(vc));
+		}
+
+		return state;
+	}
+
+	void restoreFromMemento(ValidatorMemento* m)
+	{
+		// Delete old schema
+		for (auto vc : schema) delete vc;
+		schema.clear();
+
+		State* saved = m->GetState();
+
+		for (auto vc : saved->schemaSnapshot) {
+			schema.push_back(copyValidChildren(vc));  
+		}
+	}
 };
